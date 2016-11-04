@@ -71,7 +71,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	/** Speed of the paddle - How fast the paddle move. */
 	private int paddleSpeed = 5;
 
-	/** Player score, show on upper left and right. */
+	/** Player score, show on upper left and right . */
 	private int playerOneScore;
 	private int playerTwoScore;
 
@@ -234,7 +234,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
 			g.drawString(String.valueOf(playerOneScore), 100, 100); // Player 1
 																	// score
-			g.drawString(String.valueOf(playerOneScore), 400, 100); // Player 2
+			g.drawString(String.valueOf(playerTwoScore), 400, 100); // Player 2
 																	// score
 
 			// draw the ball

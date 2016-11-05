@@ -129,7 +129,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			int nextBallRight = ballX + diameter + ballDeltaX;
 			// FIXME Something not quite right here
 			int nextBallTop = ballY ballDeltaY;
-			int nextBallBottom = ballY + diameter;
+			int nextBallBottom = ballY + diameter+ ballDeltaY;
 
 			// Player 1's paddle position
 			int playerOneRight = playerOneX + playerOneWidth;
@@ -172,7 +172,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 				// is it going to miss the paddle?
 				if (nextBallTop > playerTwoBottom || nextBallBottom < playerTwoTop) {
 
-					playerTwoScore++;
+					playerOnecore++;
 
 					// Player 1 Win, restart the game
 					if (playerOneScore == 3) {

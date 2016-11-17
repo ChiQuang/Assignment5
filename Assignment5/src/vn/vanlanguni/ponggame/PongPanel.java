@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -217,7 +218,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		} else if (playing) {
 
 			/* Game is playing */
-
+			ImageIcon imgPlayBackground = new ImageIcon("image/soccer.jpg");
+			g.drawImage(imgPlayBackground.getImage(), 0,0, 500, 500, null);
 			// set the coordinate limit
 			int playerOneRight = playerOneX + playerOneWidth;
 			int playerTwoLeft = playerTwoX;

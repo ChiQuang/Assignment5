@@ -32,7 +32,7 @@ public class SecondWindow extends JDialog{
 		txtUsername1 = new JTextField(10);
 		txtUsername2 = new JTextField(10);
 		txtUsername1.setDocument(new JTextFieldLimit(10));
-		txtUsername2.setDocument(new JTextFieldLimit(10));
+		
 		getContentPane().add(txtUsername1);
 		getContentPane().add(txtUsername2);
 		txtUsername1.setBounds(90, 26, 100, 20);

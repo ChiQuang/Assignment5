@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 /**
  * 
  * @author Invisible Man
- *
+ *p
  */
 public class MainGameUI extends JFrame{
 	private static final int _HEIGHT = 500;

@@ -36,7 +36,9 @@ import javax.swing.Timer;
  */
 public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private static final long serialVersionUID = -1097341635155021546L;
-
+	SecondWindow test = new SecondWindow();
+	String username1 ;
+	String username2;
 	private boolean showTitleScreen = true;
 	private boolean playing;
 	private boolean gameOver;
@@ -64,7 +66,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private int playerOneHeight = 60;
 
 	/** Player 2's paddle: position and size */
-	private int playerTwoX = 465;
+	private int playerTwoX = 485;
 	private int playerTwoY = 250;
 	private int playerTwoWidth = 10;
 	private int playerTwoHeight = 60;
@@ -85,7 +87,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		addKeyListener(this);
 
 		// call step() 60 fps
-		Timer timer = new Timer(1000 / 60, this);
+		Timer timer = new Timer(300 / 60, this);
 		timer.start();
 	}
 
@@ -203,7 +205,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-
+		username1=test.txtUsername1.getText();
+		username2=test.txtUsername2.getText();
 		if (showTitleScreen) {
 
 			/* Show welcome screen */
@@ -238,11 +241,17 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			// draw the scores
 			g.setColor(Color.BLUE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
-			g.drawString(String.valueOf(playerOneScore), 100, 100); // Player 1
+			g.drawString(String.valueOf(playerOneScore), 110, 100); // Player 1
 																	// score
-			g.drawString(String.valueOf(playerTwoScore), 400, 100); // Player 2
+			g.drawString(String.valueOf(playerTwoScore), 360, 100); // Player 2
 																	// score
 
+			//draw username
+			g.setColor(Color.MAGENTA);
+			g.setFont(new Font(Font.DIALOG, Font.ITALIC, 20));
+			g.drawString(username1, 65, 60);
+			g.drawString(username2, 315, 60);
+			
 			// draw the ball
 			g.setColor(Color.RED);
 			g.fillOval(ballX, ballY, diameter, diameter);
@@ -256,18 +265,19 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 
 			// Draw scores
 			// TODO Set Blue color
+			g.setColor(Color.BLUE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
-			g.drawString(String.valueOf(playerOneScore), 100, 100);
-			g.drawString(String.valueOf(playerTwoScore), 400, 100);
+			g.drawString(String.valueOf(playerOneScore), 110, 100);
+			g.drawString(String.valueOf(playerTwoScore), 360, 100);
 
 			// Draw the winner name
+			g.setColor(Color.ORANGE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
 			if (playerOneScore > playerTwoScore) {
-				g.drawString("Player 1 Wins!", 165, 200);
+				g.drawString(username1+" Wins!", 135, 200);
 			} else {
-				g.drawString("Player 2 Wins!", 165, 200);
+				g.drawString(username2+" Wins!", 135, 200);
 			}
-
 			// Draw Restart message
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
 			// TODO Draw a restart message
@@ -281,8 +291,15 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (showTitleScreen) {
 			if (e.getKeyCode() == KeyEvent.VK_P) {
-				showTitleScreen = false;
-				playing = true;
+				test.setLocationRelativeTo(this);
+				test.setVisible(true);
+				if (test.dialogResult == MyDialogResult.YES) {
+					showTitleScreen = false;
+					playing = true;
+				} else {
+					showTitleScreen = true;
+				}
+
 			}
 		} else if (playing) {
 			if (e.getKeyCode() == KeyEvent.VK_UP) {

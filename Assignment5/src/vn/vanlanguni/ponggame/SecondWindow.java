@@ -1,15 +1,19 @@
 package vn.vanlanguni.ponggame;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 @SuppressWarnings("serial")
 public class SecondWindow extends JDialog{
@@ -27,6 +31,8 @@ public class SecondWindow extends JDialog{
 		dialogResult = MyDialogResult.DEFAULT;
 		txtUsername1 = new JTextField(10);
 		txtUsername2 = new JTextField(10);
+		txtUsername1.setDocument(new JTextFieldLimit(10));
+		txtUsername2.setDocument(new JTextFieldLimit(10));
 		getContentPane().add(txtUsername1);
 		getContentPane().add(txtUsername2);
 		txtUsername1.setBounds(90, 26, 100, 20);
@@ -81,3 +87,19 @@ public class SecondWindow extends JDialog{
 		return st;
 	}
 }
+class JTextFieldLimit extends PlainDocument {
+	  private int limit;
+
+	  JTextFieldLimit(int limit) {
+	   super();
+	   this.limit = limit;
+	   }
+
+	  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+	    if (str == null) return;
+
+	    if ((getLength() + str.length()) <= limit) {
+	      super.insertString(offset, str, attr);
+	    }
+	  }
+	}

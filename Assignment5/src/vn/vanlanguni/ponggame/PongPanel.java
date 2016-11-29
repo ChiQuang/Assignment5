@@ -54,6 +54,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	Rectangle rectSetting;
 	/** ImageIcon. */
 	ImageIcon imgSettings = new ImageIcon("image/settings.png");
+	ImageIcon imgWelcomeBg = new ImageIcon("image/background/nature.gif");
+	ImageIcon imgWinnerBg = new ImageIcon("image/background/winner.gif");
 	ImageIcon imgPaddleSpace = new ImageIcon("image/paddles/Spaceship.png");
 	ImageIcon imgPaddleSoccerPlayerLeft = new ImageIcon("image/paddles/player1.png");
 	ImageIcon imgPaddleSoccerPlayerRight = new ImageIcon("image/paddles/player2.png");
@@ -225,6 +227,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		username1 = Name.txtUsername1.getText();
 		username2 = Name.txtUsername2.getText();
 		if (showTitleScreen) {
+			g.drawImage(imgWelcomeBg.getImage(), 0, 0, getWidth(), getHeight(), null);
 			g.setColor(Color.MAGENTA);
 			/* Show welcome screen */
 			
@@ -328,6 +331,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		} else if (gameOver) {
 
 			/* Show End game screen with winner name and score */
+			g.drawImage(imgWinnerBg.getImage(), 0, 0, getWidth(), getHeight(), null);
 			// Draw scores
 			// TODO Set Blue color
 			g.setColor(Color.BLUE);
@@ -356,14 +360,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	}
 
 	public void keyPressed(KeyEvent e) {
-		/*
-		 * if (showTitleScreen) { if (e.getKeyCode() == KeyEvent.VK_P) {
-		 * set_ball_and_name.setLocationRelativeTo(this);
-		 * set_ball_and_name.setVisible(true); if
-		 * (set_ball_and_name.dialogResult == MyDialogResult.YES) {
-		 * showTitleScreen = false; playing = true; } else { showTitleScreen =
-		 * true; }
-		 */
 
 		if (playing) {
 			if (e.getKeyCode() == KeyEvent.VK_UP) {

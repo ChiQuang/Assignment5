@@ -17,127 +17,136 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-
-public class set_ball extends JDialog{
+public class set_ball extends JDialog {
 	boolean ball0 = false;
 	boolean ball1 = false;
 	boolean ball2 = false;
 	boolean ball3 = false;
+	ImageIcon img;
 	// Xem khai bao MyDialogResult o cuoi class nay
-	JButton btn0 = new JButton();
-	JButton btn1 = new JButton();
-	JButton btn2 = new JButton();
-	JButton btn3 = new JButton();
-	
-	Color colorTrue =Color.LIGHT_GRAY;
-	Color colorFalse= new Color(238, 238, 238);
-	//icon ball
-	
+	JButton btnbeach_ball = new JButton();
+	JButton btnSoccer_ball_1 = new JButton();
+	JButton btnmagic_ball = new JButton();
+	JButton btncrystall_ball = new JButton();
+
+	Color colorTrue = Color.LIGHT_GRAY;
+	Color colorFalse = new Color(238, 238, 238);
+	// icon ball
+	ImageIcon imgbeach_ball = new ImageIcon("image/icon_ball/beach_ball.png");
+	ImageIcon imgSoccer_ball_1 = new ImageIcon("image/icon_ball/Soccer_ball_1.png");
+	ImageIcon imgmagic_ball = new ImageIcon("image/icon_ball/magic_ball.png");
+	ImageIcon imgcrystal_ball = new ImageIcon("image/icon_ball/crystal_ball.png");
 	public MyDialogResults dialogResult;
 
 	public set_ball() {
-		setPreferredSize(new Dimension(300, 280));
-		setTitle("chon banh");
+		setPreferredSize(new Dimension(290, 210));
+		setTitle("choose ball");
 		getContentPane().setLayout(null);
 		setModal(true);
-		
-		
-		btn0.setBackground(colorFalse);
-		btn1.setBackground(colorFalse);
-		btn2.setBackground(colorFalse);
-		btn3.setBackground(colorFalse);
+		// set icon image
+		btnbeach_ball.setIcon(new ImageIcon(imgbeach_ball.getImage()));
+		btnSoccer_ball_1.setIcon(new ImageIcon(imgSoccer_ball_1.getImage()));
+		btnmagic_ball.setIcon(new ImageIcon(imgmagic_ball.getImage()));
+		btncrystall_ball.setIcon(new ImageIcon(imgcrystal_ball.getImage()));
+
+		btnbeach_ball.setBackground(colorFalse);
+		btnSoccer_ball_1.setBackground(colorFalse);
+		btnmagic_ball.setBackground(colorFalse);
+		btncrystall_ball.setBackground(colorFalse);
 		dialogResult = MyDialogResults.DEFAULT;
-		getContentPane().add(btn0);
-		getContentPane().add(btn1);
-		getContentPane().add(btn2);
-		getContentPane().add(btn3);
-		btn0.setBounds(25, 120, 50, 50);
-		btn1.setBounds(85, 120, 50, 50);
-		btn2.setBounds(150, 120, 50, 50);
-		btn3.setBounds(210, 120, 50, 50);
-		
-		btn0.addActionListener(new ActionListener() {
+		getContentPane().add(btnbeach_ball);
+		getContentPane().add(btnSoccer_ball_1);
+		getContentPane().add(btnmagic_ball);
+		getContentPane().add(btncrystall_ball);
+
+		// add location
+		btnbeach_ball.setBounds(25, 30, 50, 50);
+		btnSoccer_ball_1.setBounds(85, 30, 50, 50);
+		btnmagic_ball.setBounds(150, 30, 50, 50);
+		btncrystall_ball.setBounds(210, 30, 50, 50);
+
+		btnbeach_ball.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (ball0 == false) {
-					btn0.setBackground(colorTrue);
+					btnbeach_ball.setBackground(colorTrue);
 					ball0 = true;
 					ball1 = false;
 					ball2 = false;
 					ball3 = false;
-					btn1.setBackground(colorFalse);
-					btn2.setBackground(colorFalse);
-					btn3.setBackground(colorFalse);
+					btnSoccer_ball_1.setBackground(colorFalse);
+					btnmagic_ball.setBackground(colorFalse);
+					btncrystall_ball.setBackground(colorFalse);
 				} else {
-					btn0.setBackground(colorFalse);
+					btnbeach_ball.setBackground(colorFalse);
 					ball0 = false;
 				}
 
 			}
 		});
 
-		btn1.addActionListener(new ActionListener() {
+		btnSoccer_ball_1.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (ball1 == false) {
-					btn1.setBackground(colorTrue);
+					btnSoccer_ball_1.setBackground(colorTrue);
 					ball1 = true;
 					ball0 = false;
 					ball2 = false;
 					ball3 = false;
-					btn0.setBackground(colorFalse);
-					btn2.setBackground(colorFalse);
-					btn3.setBackground(colorFalse);
+					btnbeach_ball.setBackground(colorFalse);
+					btnmagic_ball.setBackground(colorFalse);
+					btncrystall_ball.setBackground(colorFalse);
 				} else {
-					btn1.setBackground(colorFalse);
+					btnSoccer_ball_1.setBackground(colorFalse);
 					ball1 = false;
 				}
 
 			}
 		});
 
-		btn2.addActionListener(new ActionListener() {
+		btnmagic_ball.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (ball2 == false) {
-					btn2.setBackground(colorTrue);
+					btnmagic_ball.setBackground(colorTrue);
 					ball2 = true;
 					ball0 = false;
 					ball1 = false;
 					ball3 = false;
-					btn0.setBackground(colorFalse);
-					btn1.setBackground(colorFalse);
-					btn3.setBackground(colorFalse);
+					btnbeach_ball.setBackground(colorFalse);
+					btnSoccer_ball_1.setBackground(colorFalse);
+					btncrystall_ball.setBackground(colorFalse);
 				} else {
-					btn2.setBackground(colorFalse);
+					btnmagic_ball.setBackground(colorFalse);
 					ball2 = false;
 				}
 
 			}
 		});
 
-		btn3.addActionListener(new ActionListener() {
+		btncrystall_ball.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if (ball3 == false) {
-					btn3.setBackground(colorTrue);
+					btncrystall_ball.setBackground(colorTrue);
 					ball3 = true;
 					ball0 = false;
 					ball2 = false;
 					ball1 = false;
-					btn0.setBackground(colorFalse);
-					btn1.setBackground(colorFalse);
-					btn2.setBackground(colorFalse);
+					btnbeach_ball.setBackground(colorFalse);
+					btnSoccer_ball_1.setBackground(colorFalse);
+					btnmagic_ball.setBackground(colorFalse);
 				} else {
-					btn3.setBackground(colorFalse);
+					btncrystall_ball.setBackground(colorFalse);
 					ball3 = false;
 				}
 
@@ -151,7 +160,7 @@ public class set_ball extends JDialog{
 				setVisible(false);
 			}
 		});
-		btnSave.setBounds(44, 200, 89, 23);
+		btnSave.setBounds(44, 120, 89, 23);
 		getContentPane().add(btnSave);
 
 		JButton btnCancel = new JButton("Cancel");
@@ -161,7 +170,7 @@ public class set_ball extends JDialog{
 				setVisible(false);
 			}
 		});
-		btnCancel.setBounds(154, 200, 89, 23);
+		btnCancel.setBounds(154, 120, 89, 23);
 		getContentPane().add(btnCancel);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
@@ -170,7 +179,7 @@ public class set_ball extends JDialog{
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				int result = JOptionPane.showConfirmDialog(set_ball.this, "Exit?");
+				int result = JOptionPane.showConfirmDialog(set_ball.this, "Are you sure ?");
 				if (result == JOptionPane.YES_OPTION) {
 					setVisible(false);
 				}

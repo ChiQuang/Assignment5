@@ -1,3 +1,5 @@
+package vn.vanlanguni.ponggame;
+
 /*
  * PONG GAME REQUIREMENTS
  * This simple "tennis like" game features two paddles and a ball, 
@@ -15,34 +17,48 @@
  *  
  *  Version: 0.5
  */
-package vn.vanlanguni.ponggame;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 
 /**
  * 
  * @author Invisible Man
  *
  */
-public class PongPanel extends JPanel implements ActionListener, KeyListener {
+public class PongPanel extends JPanel implements ActionListener, KeyListener, MouseMotionListener, MouseListener {
 	private static final long serialVersionUID = -1097341635155021546L;
-	SecondWindow test = new SecondWindow();
-	String username1 ;
+	set_name Name = new set_name();
+	set_ball Ball = new set_ball();
+	String username1;
 	String username2;
 	private boolean showTitleScreen = true;
 	private boolean playing;
 	private boolean gameOver;
-
+	private boolean checkrect = false, checksetting = false;
+	Rectangle rectPlay;
+	Rectangle rectSetting;
+	/** ImageIcon. */
+	ImageIcon imgSettings = new ImageIcon("image/settings.png");
+	ImageIcon imgPaddleSpace = new ImageIcon("image/paddles/Spaceship.png");
+	ImageIcon imgPaddleSoccerPlayerLeft = new ImageIcon("image/paddles/player1.png");
+	ImageIcon imgPaddleSoccerPlayerRight = new ImageIcon("image/paddles/player2.png");
+	ImageIcon imgPaddleBeach = new ImageIcon("image/paddles/surfboard.png");
+	ImageIcon imgPaddleChristmas = new ImageIcon("image/paddles/Christmas-Tree.png");
 	/** Background. */
 	private Color backgroundColor = Color.BLACK;
 
@@ -53,23 +69,23 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private boolean sPressed;
 
 	/** The ball: position, diameter */
-	private int ballX = 250;
-	private int ballY = 250;
-	private int diameter = 20;
+	private int ballX = 300;
+	private int ballY = 300;
+	private int diameter = 30;
 	private int ballDeltaX = -1;
 	private int ballDeltaY = 3;
 
 	/** Player 1's paddle: position and size */
 	private int playerOneX = 0;
-	private int playerOneY = 250;
-	private int playerOneWidth = 10;
-	private int playerOneHeight = 60;
+	private int playerOneY = 200;
+	private int playerOneWidth = 30;
+	private int playerOneHeight = 75;
 
 	/** Player 2's paddle: position and size */
-	private int playerTwoX = 485;
-	private int playerTwoY = 250;
-	private int playerTwoWidth = 10;
-	private int playerTwoHeight = 60;
+	private int playerTwoX = 565;
+	private int playerTwoY = 200;
+	private int playerTwoWidth = 30;
+	private int playerTwoHeight = 75;
 
 	/** Speed of the paddle - How fast the paddle move. */
 	private int paddleSpeed = 5;
@@ -83,11 +99,12 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		setBackground(backgroundColor);
 
 		// listen to key presses
+		addMouseMotionListener(this);
+		addMouseListener(this);
 		setFocusable(true);
 		addKeyListener(this);
-
 		// call step() 60 fps
-		Timer timer = new Timer(300 / 60, this);
+		Timer timer = new Timer(500 / 60, this);
 		timer.start();
 	}
 
@@ -131,8 +148,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			int nextBallLeft = ballX + ballDeltaX;
 			int nextBallRight = ballX + diameter + ballDeltaX;
 			// FIXME Something not quite right here
-			int nextBallTop = ballY +ballDeltaY;
-			int nextBallBottom = ballY + diameter+ ballDeltaY;
+			int nextBallTop = ballY + ballDeltaY;
+			int nextBallBottom = ballY + diameter + ballDeltaY;
 
 			// Player 1's paddle position
 			int playerOneRight = playerOneX + playerOneWidth;
@@ -161,8 +178,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 						playing = false;
 						gameOver = true;
 					}
-					ballX = 250;
-					ballY = 250;
+					ballX = 280;
+					ballY = 300;
 				} else {
 					// If the ball hitting the paddle, it will bounce back
 					// FIXME Something wrong here
@@ -182,8 +199,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 						playing = false;
 						gameOver = true;
 					}
-					ballX = 200;
-					ballY = 200;
+					ballX = 300;
+					ballY = 300;
 				} else {
 
 					// If the ball hitting the paddle, it will bounce back
@@ -205,32 +222,94 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		username1=test.txtUsername1.getText();
-		username2=test.txtUsername2.getText();
+		username1 = Name.txtUsername1.getText();
+		username2 = Name.txtUsername2.getText();
 		if (showTitleScreen) {
-
+			g.setColor(Color.MAGENTA);
 			/* Show welcome screen */
-
+			
 			// Draw game title and start message
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 40));
-			g.drawString("Pong Game", 130, 100);
-
+			g.drawString("Pong Game", 180, 100);
+			g.setColor(Color.white);
+			rectPlay = new Rectangle(249, 380, 57, 25);
+			rectSetting = new Rectangle(550, 525, 30, 30);
 			// FIXME Welcome message below show smaller than game title
+			g.setFont(new Font(Font.DIALOG, Font.BOLD, 40));
+			g.drawString("HERE", 225, 250); // Troll Just Kiddng
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
-			g.drawString("Press 'P' to play.", 175, 400);
+			if (checkrect == false) {
+				g.drawString("Click ", 195, 400);
+				g.drawString("to play.", 315, 400);
+				g.setColor(Color.lightGray);
+				g.drawString("'HERE'", 245, 400);
+			}
+			if (checkrect == true) {
+				g.setColor(Color.MAGENTA);
+				g.drawString("START ", 245, 400);
+			}
+			if (checksetting == false) {
+				g.drawImage(imgSettings.getImage(), 550, 525, 30, 30, null);
+			}
+			if (checksetting == true) {
+				g.drawImage(imgSettings.getImage(), 540, 515, 40, 40, null);
+			}
 		} else if (playing) {
 
 			/* Game is playing */
-			ImageIcon imgPlayBackground = new ImageIcon("image/soccer.jpg");
-			g.drawImage(imgPlayBackground.getImage(), 0,0, 500, 500, null);
+
 			// set the coordinate limit
 			int playerOneRight = playerOneX + playerOneWidth;
 			int playerTwoLeft = playerTwoX;
-
 			// draw dashed line down center
+
+			// draw the ball and paddles
+			if (Ball.ball0 == true) {
+				
+				g.setColor(Color.WHITE);
+				g.fillOval(ballX, ballY, diameter, diameter);
+				
+				g.drawImage(imgPaddleBeach.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight, null);
+				g.drawImage(imgPaddleBeach.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight, null);
+			} else if (Ball.ball1 == true) {
+				
+				g.setColor(Color.WHITE);
+				g.fillOval(ballX, ballY, diameter, diameter);
+				
+				g.drawImage(imgPaddleSoccerPlayerLeft.getImage(), playerOneX, playerOneY, playerOneWidth,
+						playerOneHeight, null);
+				g.drawImage(imgPaddleSoccerPlayerRight.getImage(), playerTwoX, playerTwoY, playerTwoWidth,
+						playerTwoHeight, null);
+			} else if (Ball.ball2 == true) {
+				
+				g.setColor(Color.WHITE);
+				g.fillOval(ballX, ballY, diameter, diameter);
+				
+				g.drawImage(imgPaddleSpace.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight, null);
+				g.drawImage(imgPaddleSpace.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight, null);
+			} else if (Ball.ball3 == true) {
+				
+				g.setColor(Color.WHITE);
+				g.fillOval(ballX, ballY, diameter, diameter);
+				
+				g.drawImage(imgPaddleChristmas.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight,
+						null);
+				g.drawImage(imgPaddleChristmas.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight,
+						null);
+			} else {
+				g.setColor(Color.WHITE);
+				g.fillOval(ballX, ballY, diameter, diameter);
+				g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
+				g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
+			}
+			// draw the paddles
+			// g.fillRect(playerOneX, playerOneY, playerOneWidth,
+			// playerOneHeight);
+			// g.fillRect(playerTwoX, playerTwoY, playerTwoWidth,
+			// playerTwoHeight);
 			g.setColor(Color.GREEN);
 			for (int lineY = 0; lineY < getHeight(); lineY += 50) {
-				g.drawLine(250, lineY, 250, lineY + 25);
+				g.drawLine(300, lineY, 300, lineY + 25);
 			}
 
 			// draw "goal lines" on each side
@@ -240,47 +319,41 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 			// draw the scores
 			g.setColor(Color.BLUE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
-			g.drawString(String.valueOf(playerOneScore), 110, 100); // Player 1
+			g.drawString(String.valueOf(playerOneScore), 150, 100); // Player 1
 																	// score
-			g.drawString(String.valueOf(playerTwoScore), 360, 100); // Player 2
+			g.drawString(String.valueOf(playerTwoScore), 430, 100); // Player 2
 																	// score
 
-			//draw username
+			// draw username
 			g.setColor(Color.MAGENTA);
 			g.setFont(new Font(Font.DIALOG, Font.ITALIC, 20));
-			g.drawString(username1, 65, 60);
-			g.drawString(username2, 315, 60);
-			
-			// draw the ball
-			g.setColor(Color.RED);
-			g.fillOval(ballX, ballY, diameter, diameter);
+			g.drawString(username1, 105, 60);
+			g.drawString(username2, 385, 60);
 
-			// draw the paddles
-			g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
-			g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 		} else if (gameOver) {
 
 			/* Show End game screen with winner name and score */
-
 			// Draw scores
 			// TODO Set Blue color
 			g.setColor(Color.BLUE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
-			g.drawString(String.valueOf(playerOneScore), 110, 100);
-			g.drawString(String.valueOf(playerTwoScore), 360, 100);
+			g.drawString(String.valueOf(playerOneScore), 150, 100);
+			g.drawString(String.valueOf(playerTwoScore), 430, 100);
 
 			// Draw the winner name
+			// g.drawImage(bgw.getImage(), 0, 0, 600, 600, null);
 			g.setColor(Color.ORANGE);
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 36));
 			if (playerOneScore > playerTwoScore) {
-				g.drawString(username1+" Wins!", 135, 200);
+				g.drawString(username1 + " Wins!", 145, 200);
 			} else {
-				g.drawString(username2+" Wins!", 135, 200);
+				g.drawString(username2 + " Wins!", 145, 200);
 			}
+
 			// Draw Restart message
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
 			// TODO Draw a restart message
-			g.drawString("Press 'SpaceBar' to restart.", 175, 400);
+			g.drawString("Press 'SpaceBar' to restart.", 175, 500);
 		}
 	}
 
@@ -288,19 +361,16 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		if (showTitleScreen) {
-			if (e.getKeyCode() == KeyEvent.VK_P) {
-				test.setLocationRelativeTo(this);
-				test.setVisible(true);
-				if (test.dialogResult == MyDialogResult.YES) {
-					showTitleScreen = false;
-					playing = true;
-				} else {
-					showTitleScreen = true;
-				}
+		/*
+		 * if (showTitleScreen) { if (e.getKeyCode() == KeyEvent.VK_P) {
+		 * set_ball_and_name.setLocationRelativeTo(this);
+		 * set_ball_and_name.setVisible(true); if
+		 * (set_ball_and_name.dialogResult == MyDialogResult.YES) {
+		 * showTitleScreen = false; playing = true; } else { showTitleScreen =
+		 * true; }
+		 */
 
-			}
-		} else if (playing) {
+		if (playing) {
 			if (e.getKeyCode() == KeyEvent.VK_UP) {
 				upPressed = true;
 			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -313,12 +383,14 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		} else if (gameOver && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			gameOver = false;
 			showTitleScreen = true;
-			playerOneY = 250;
-			playerTwoY = 250;
-			ballX = 250;
-			ballY = 250;
+			playerOneY = 200;
+			playerTwoY = 200;
+			ballX = 300;
+			ballY = 300;
 			playerOneScore = 0;
 			playerTwoScore = 0;
+			Name.txtUsername1.setText("");
+			Name.txtUsername2.setText("");
 		}
 	}
 
@@ -332,6 +404,76 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		} else if (e.getKeyCode() == KeyEvent.VK_S) {
 			sPressed = false;
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent g) {
+		// TODO Auto-generated method stub
+		if (rectPlay.contains(g.getPoint())) {
+			Name.setLocationRelativeTo(this);
+			Name.setVisible(true);
+			if (Name.dialogResult == MyDialogResults.YES) {
+				showTitleScreen = false;
+				playing = true;
+			} else {
+				showTitleScreen = true;
+			}
+		} else if (rectSetting.contains(g.getPoint())) {
+			Ball.setLocationRelativeTo(this);
+			Ball.setVisible(true);
+			showTitleScreen = true;
+
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent g) {
+		// TODO Auto-generated method stub
+		if (rectPlay.contains(g.getX(), g.getY())) {
+			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			checkrect = true;
+			checksetting = false;
+		} else if (rectSetting.contains(g.getX(), g.getY())) {
+			setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			checkrect = false;
+			checksetting = true;
+		} else {
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			checkrect = false;
+			checksetting = false;
+		}
+
+		repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -60,6 +60,10 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	ImageIcon imgPaddleSoccerPlayerRight = new ImageIcon("image/paddles/player2.png");
 	ImageIcon imgPaddleBeach = new ImageIcon("image/paddles/surfboard.png");
 	ImageIcon imgPaddleChristmas = new ImageIcon("image/paddles/Christmas-Tree.png");
+	ImageIcon imgbeach_background = new ImageIcon("image/background/beach_background.png");
+	ImageIcon imglogo1_background = new ImageIcon("image/background/logo1_background.jpg");
+	ImageIcon imgSpace_Backgrounds = new ImageIcon("image/background/Space_Backgrounds.jpg");
+	ImageIcon imgChristmas_background = new ImageIcon("image/background/Christmas_background.gif");
 	/** Background. */
 	private Color backgroundColor = Color.BLACK;
 
@@ -265,14 +269,15 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 
 			// draw the ball and paddles
 			if (Ball.ball0 == true) {
-
+				// add icon image
+				g.drawImage(imgbeach_background.getImage(), 0, 0, getWidth(), getHeight(), null);
 				g.drawImage(Ball.imgbeach_ball.getImage(), ballX, ballY, diameter, diameter, null);
 
 				g.drawImage(imgPaddleBeach.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight, null);
 				g.drawImage(imgPaddleBeach.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight, null);
 			} else if (Ball.ball1 == true) {
 
-				g.setColor(Color.WHITE);
+				g.drawImage(imglogo1_background.getImage(), 0, 0, getWidth(), getHeight(), null);
 				g.drawImage(Ball.imgSoccer_ball_1.getImage(), ballX, ballY, diameter, diameter, null);
 
 				g.drawImage(imgPaddleSoccerPlayerLeft.getImage(), playerOneX, playerOneY, playerOneWidth,
@@ -281,14 +286,14 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 						playerTwoHeight, null);
 			} else if (Ball.ball2 == true) {
 
-				g.setColor(Color.WHITE);
-				g.drawImage(Ball.imgcrystal_ball.getImage(), ballX, ballY, diameter, diameter, null);
+				g.drawImage(imgSpace_Backgrounds.getImage(), 0, 0, getWidth(), getHeight(), null);
+				g.drawImage(Ball.imgmagic_ball.getImage(), ballX, ballY, diameter, diameter, null);
 
 				g.drawImage(imgPaddleSpace.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight, null);
 				g.drawImage(imgPaddleSpace.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight, null);
 			} else if (Ball.ball3 == true) {
 
-				g.setColor(Color.WHITE);
+				g.drawImage(imgChristmas_background.getImage(), 0, 0, getWidth(), getHeight(), null);
 				g.drawImage(Ball.imgcrystal_ball.getImage(), ballX, ballY, diameter, diameter, null);
 
 				g.drawImage(imgPaddleChristmas.getImage(), playerOneX, playerOneY, playerOneWidth, playerOneHeight,
@@ -296,7 +301,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				g.drawImage(imgPaddleChristmas.getImage(), playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight,
 						null);
 			} else {
-				g.setColor(Color.WHITE);
+
 				g.fillOval(ballX, ballY, diameter, diameter);
 				g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
 				g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);

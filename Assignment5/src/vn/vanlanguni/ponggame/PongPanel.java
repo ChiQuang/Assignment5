@@ -235,8 +235,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			rectPlay = new Rectangle(249, 380, 57, 25);
 			rectSetting = new Rectangle(550, 525, 30, 30);
 			// FIXME Welcome message below show smaller than game title
-			g.setFont(new Font(Font.DIALOG, Font.BOLD, 40));
-			g.drawString("HERE", 225, 250); // Troll Just Kiddng
 			g.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
 			if (checkrect == false) {
 				g.drawString("Click ", 195, 400);
@@ -302,11 +300,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				g.fillRect(playerOneX, playerOneY, playerOneWidth, playerOneHeight);
 				g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 			}
-			// draw the paddles
-			// g.fillRect(playerOneX, playerOneY, playerOneWidth,
-			// playerOneHeight);
-			// g.fillRect(playerTwoX, playerTwoY, playerTwoWidth,
-			// playerTwoHeight);
+			
+			//draw line
 			g.setColor(Color.GREEN);
 			for (int lineY = 0; lineY < getHeight(); lineY += 50) {
 				g.drawLine(300, lineY, 300, lineY + 25);

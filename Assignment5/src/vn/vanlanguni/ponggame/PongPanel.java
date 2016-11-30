@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -49,9 +52,12 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private boolean playing;
 	private boolean gameOver;
 	private boolean checkrect = false, checksetting = false;
+	private int TimePlay = 500 / 60;
 	Rectangle rectPlay;
 	Rectangle rectSetting;
 	/** ImageIcon. */
+	ImageIcon imgMinus = new ImageIcon("image/minus.png");
+	ImageIcon imgPlus = new ImageIcon("image/plus.png");
 	ImageIcon imgSettings = new ImageIcon("image/settings.png");
 	ImageIcon imgWelcomeBg = new ImageIcon("image/background/nature.gif");
 	ImageIcon imgWinnerBg = new ImageIcon("image/background/winner.gif");
@@ -84,13 +90,14 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int playerOneX = 0;
 	private int playerOneY = 200;
 	private int playerOneWidth = 30;
-	private int playerOneHeight = 75;
+	private int playerOneHeight = 90;
+	
 
 	/** Player 2's paddle: position and size */
 	private int playerTwoX = 565;
 	private int playerTwoY = 200;
 	private int playerTwoWidth = 30;
-	private int playerTwoHeight = 75;
+	private int playerTwoHeight = 90;
 
 	/** Speed of the paddle - How fast the paddle move. */
 	private int paddleSpeed = 5;
@@ -98,6 +105,16 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	/** Player score, show on upper left and right . */
 	private int playerOneScore;
 	private int playerTwoScore;
+	// Random +/-
+		private int timeToDisplayMinus;
+		private int timeToDisplayPlus;
+		private boolean showRandom1;
+		private boolean showRandom;
+		private int xRan;
+		private int yRan;
+		private int xRan1;
+		private int yRan1;
+		private int lastHitBall;
 
 	/** Construct a PongPanel. */
 	public PongPanel() {
@@ -109,7 +126,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		setFocusable(true);
 		addKeyListener(this);
 		// call step() 60 fps
-		Timer timer = new Timer(500 / 60, this);
+		Timer timer = new Timer(TimePlay, this);
 		timer.start();
 	}
 
@@ -189,6 +206,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					// If the ball hitting the paddle, it will bounce back
 					// FIXME Something wrong here
 					ballDeltaX *= -1;
+					lastHitBall = 1;
 				}
 			}
 
@@ -211,18 +229,83 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					// If the ball hitting the paddle, it will bounce back
 					// FIXME Something wrong here
 					ballDeltaX *= -1;
+					lastHitBall = 2;
 				}
 			}
 
 			// move the ball
 			ballX += ballDeltaX;
 			ballY += ballDeltaY;
+			
+			//Random -
+			timeToDisplayMinus -= TimePlay;
+			if (timeToDisplayMinus < 0) {
+				if (showRandom1 == false) {
+					showRandom1 = true;
+					xRan1 = ThreadLocalRandom.current().nextInt(50, 450 + 1);
+					yRan1 = ThreadLocalRandom.current().nextInt(0, 470 + 1);
+				}else{
+					Point ballCenter = new Point(ballX+diameter/2, ballY+diameter/2);
+					Point ranCenter = new Point(xRan1+15, yRan1+15);
+					double distance = getPointDistance(ballCenter, ranCenter);
+					if(distance < diameter/2+15){
+						showRandom1 = false;
+						timeToDisplayMinus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
+						if(lastHitBall == 1){
+							if(playerOneHeight>=40.){
+							playerOneHeight -= 20;}
+						}else if(lastHitBall == 2){
+							if(playerTwoHeight>=40){
+							playerTwoHeight -= 20;}
+						}
+					}
+				}
+				if (timeToDisplayMinus < -5000) {
+					showRandom1 = false;
+					timeToDisplayMinus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
+				}
+			}
+			
+			timeToDisplayPlus -= TimePlay;
+			if (timeToDisplayPlus < 0) {
+				if (showRandom == false) {
+					showRandom = true;
+					xRan = ThreadLocalRandom.current().nextInt(50, 450 + 1);
+					yRan = ThreadLocalRandom.current().nextInt(0, 470 + 1);
+				}else{
+					Point ballCenter = new Point(ballX+diameter/2, ballY+diameter/2);
+					Point ranCenter = new Point(xRan+15, yRan+15);
+					double distance = getPointDistance(ballCenter, ranCenter);
+					if(distance < diameter/2+15){
+						showRandom = false;
+						timeToDisplayPlus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
+						if(lastHitBall == 1){
+							if(playerOneHeight<=150){
+							playerOneHeight += 20;}
+						}else if(lastHitBall == 2){
+							if(playerTwoHeight<=150){
+							playerTwoHeight += 20;}
+						}
+					}
+				}
+				if (timeToDisplayPlus < -6000) {
+					showRandom = false;
+					timeToDisplayPlus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
+				}
+			}
+
+
 		}
 
 		// stuff has moved, tell this JPanel to repaint itself
 		repaint();
 	}
 
+	public double getPointDistance(Point p1, Point p2) {
+		return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+	}
+	
+	
 	/** Paint the game screen. */
 	public void paintComponent(Graphics g) {
 
@@ -307,6 +390,13 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 			}
 
+			if (showRandom1) {				
+				g.drawImage(imgMinus.getImage(),xRan1, yRan1, 30, 30,null);
+			}
+			if (showRandom) {				
+				g.drawImage(imgPlus.getImage(),xRan, yRan, 30, 30,null);
+			}
+			
 			// draw line
 			g.setColor(Color.GREEN);
 			for (int lineY = 0; lineY < getHeight(); lineY += 50) {
@@ -377,6 +467,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		} else if (gameOver && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			gameOver = false;
 			showTitleScreen = true;
+			playerOneHeight=90;
+			playerTwoHeight=90;
 			playerOneY = 200;
 			playerTwoY = 200;
 			ballX = 300;

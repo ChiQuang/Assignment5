@@ -31,6 +31,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
@@ -91,7 +92,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int playerOneY = 200;
 	private int playerOneWidth = 30;
 	private int playerOneHeight = 90;
-	
 
 	/** Player 2's paddle: position and size */
 	private int playerTwoX = 565;
@@ -106,25 +106,32 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int playerOneScore;
 	private int playerTwoScore;
 	// Random +/-
-		private int timeToDisplayMinus;
-		private int timeToDisplayPlus;
-		private boolean showRandom1;
-		private boolean showRandom;
-		private int xRan;
-		private int yRan;
-		private int xRan1;
-		private int yRan1;
-		private int lastHitBall;
+	private int timeToDisplayMinus;
+	private int timeToDisplayPlus;
+	private boolean showRandom1;
+	private boolean showRandom;
+	private int xRan;
+	private int yRan;
+	private int xRan1;
+	private int yRan1;
+	private int lastHitBall;
+	// Musics, sounds in game
+	private sounds startgame, winbg;
 
 	/** Construct a PongPanel. */
 	public PongPanel() {
 		setBackground(backgroundColor);
+
+		//
+		startgame = new sounds(new File("Musics\\startgame.wav"));
+		winbg = new sounds(new File("Musics\\winbg.wav"));
 
 		// listen to key presses
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		setFocusable(true);
 		addKeyListener(this);
+		startgame.playMusic();
 		// call step() 60 fps
 		Timer timer = new Timer(TimePlay, this);
 		timer.start();
@@ -139,6 +146,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	public void step() {
 
 		if (playing) {
+			startgame.stop();
 
 			/* Playing mode */
 
@@ -199,6 +207,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					if (playerTwoScore == 3) {
 						playing = false;
 						gameOver = true;
+						winbg.playMusic();
 					}
 					ballX = 280;
 					ballY = 300;
@@ -207,6 +216,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					// FIXME Something wrong here
 					ballDeltaX *= -1;
 					lastHitBall = 1;
+					
 				}
 			}
 
@@ -221,6 +231,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					if (playerOneScore == 3) {
 						playing = false;
 						gameOver = true;
+						winbg.playMusic();
 					}
 					ballX = 300;
 					ballY = 300;
@@ -236,27 +247,29 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			// move the ball
 			ballX += ballDeltaX;
 			ballY += ballDeltaY;
-			
-			//Random -
+
+			// Random -
 			timeToDisplayMinus -= TimePlay;
 			if (timeToDisplayMinus < 0) {
 				if (showRandom1 == false) {
 					showRandom1 = true;
 					xRan1 = ThreadLocalRandom.current().nextInt(50, 450 + 1);
 					yRan1 = ThreadLocalRandom.current().nextInt(0, 470 + 1);
-				}else{
-					Point ballCenter = new Point(ballX+diameter/2, ballY+diameter/2);
-					Point ranCenter = new Point(xRan1+15, yRan1+15);
+				} else {
+					Point ballCenter = new Point(ballX + diameter / 2, ballY + diameter / 2);
+					Point ranCenter = new Point(xRan1 + 15, yRan1 + 15);
 					double distance = getPointDistance(ballCenter, ranCenter);
-					if(distance < diameter/2+15){
+					if (distance < diameter / 2 + 15) {
 						showRandom1 = false;
 						timeToDisplayMinus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
-						if(lastHitBall == 1){
-							if(playerOneHeight>=40.){
-							playerOneHeight -= 20;}
-						}else if(lastHitBall == 2){
-							if(playerTwoHeight>=40){
-							playerTwoHeight -= 20;}
+						if (lastHitBall == 1) {
+							if (playerOneHeight >= 40.) {
+								playerOneHeight -= 20;
+							}
+						} else if (lastHitBall == 2) {
+							if (playerTwoHeight >= 40) {
+								playerTwoHeight -= 20;
+							}
 						}
 					}
 				}
@@ -265,26 +278,28 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					timeToDisplayMinus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
 				}
 			}
-			
+
 			timeToDisplayPlus -= TimePlay;
 			if (timeToDisplayPlus < 0) {
 				if (showRandom == false) {
 					showRandom = true;
 					xRan = ThreadLocalRandom.current().nextInt(50, 450 + 1);
 					yRan = ThreadLocalRandom.current().nextInt(0, 470 + 1);
-				}else{
-					Point ballCenter = new Point(ballX+diameter/2, ballY+diameter/2);
-					Point ranCenter = new Point(xRan+15, yRan+15);
+				} else {
+					Point ballCenter = new Point(ballX + diameter / 2, ballY + diameter / 2);
+					Point ranCenter = new Point(xRan + 15, yRan + 15);
 					double distance = getPointDistance(ballCenter, ranCenter);
-					if(distance < diameter/2+15){
+					if (distance < diameter / 2 + 15) {
 						showRandom = false;
 						timeToDisplayPlus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
-						if(lastHitBall == 1){
-							if(playerOneHeight<=150){
-							playerOneHeight += 20;}
-						}else if(lastHitBall == 2){
-							if(playerTwoHeight<=150){
-							playerTwoHeight += 20;}
+						if (lastHitBall == 1) {
+							if (playerOneHeight <= 150) {
+								playerOneHeight += 20;
+							}
+						} else if (lastHitBall == 2) {
+							if (playerTwoHeight <= 150) {
+								playerTwoHeight += 20;
+							}
 						}
 					}
 				}
@@ -293,7 +308,6 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					timeToDisplayPlus = ThreadLocalRandom.current().nextInt(5, 15 + 1) * 1000;
 				}
 			}
-
 
 		}
 
@@ -304,8 +318,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	public double getPointDistance(Point p1, Point p2) {
 		return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 	}
-	
-	
+
 	/** Paint the game screen. */
 	public void paintComponent(Graphics g) {
 
@@ -390,13 +403,13 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 				g.fillRect(playerTwoX, playerTwoY, playerTwoWidth, playerTwoHeight);
 			}
 
-			if (showRandom1) {				
-				g.drawImage(imgMinus.getImage(),xRan1, yRan1, 30, 30,null);
+			if (showRandom1) {
+				g.drawImage(imgMinus.getImage(), xRan1, yRan1, 30, 30, null);
 			}
-			if (showRandom) {				
-				g.drawImage(imgPlus.getImage(),xRan, yRan, 30, 30,null);
+			if (showRandom) {
+				g.drawImage(imgPlus.getImage(), xRan, yRan, 30, 30, null);
 			}
-			
+
 			// draw line
 			g.setColor(Color.GREEN);
 			for (int lineY = 0; lineY < getHeight(); lineY += 50) {
@@ -467,8 +480,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		} else if (gameOver && e.getKeyCode() == KeyEvent.VK_SPACE) {
 			gameOver = false;
 			showTitleScreen = true;
-			playerOneHeight=90;
-			playerTwoHeight=90;
+			playerOneHeight = 90;
+			playerTwoHeight = 90;
 			playerOneY = 200;
 			playerTwoY = 200;
 			ballX = 300;
@@ -477,6 +490,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			playerTwoScore = 0;
 			Name.txtUsername1.setText("");
 			Name.txtUsername2.setText("");
+			startgame.playMusic();
+			winbg.stop();
 		}
 	}
 

@@ -25,4 +25,4 @@ public class MainScreen extends JFrame{
        MainScreen mainFrame = new MainScreen();
        mainFrame.setVisible(true);
     }
-}
+}	

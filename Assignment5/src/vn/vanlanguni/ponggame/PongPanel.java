@@ -116,7 +116,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 	private int yRan1;
 	private int lastHitBall;
 	// Musics, sounds in game
-	private sounds startgame, winbg;
+	private sounds startgame, winbg, effect;
 
 	/** Construct a PongPanel. */
 	public PongPanel() {
@@ -125,6 +125,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		//
 		startgame = new sounds(new File("Musics\\startgame.wav"));
 		winbg = new sounds(new File("Musics\\winbg.wav"));
+		effect = new sounds(new File("Musics\\effect.wav"));
 
 		// listen to key presses	
 		addMouseMotionListener(this);
@@ -194,6 +195,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 			// ball bounces off top and bottom of screen
 			if (nextBallTop < 0 || nextBallBottom > getHeight()) {
 				ballDeltaY *= -1;
+				effect.play();
 			}
 
 			// will the ball go off the left side?
@@ -216,6 +218,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					// FIXME Something wrong here
 					ballDeltaX *= -1;
 					lastHitBall = 1;
+					effect.play();
 					
 				}
 			}
@@ -241,6 +244,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 					// FIXME Something wrong here
 					ballDeltaX *= -1;
 					lastHitBall = 2;
+					effect.play();
 				}
 			}
 

@@ -126,7 +126,7 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener, Mo
 		startgame = new sounds(new File("Musics\\startgame.wav"));
 		winbg = new sounds(new File("Musics\\winbg.wav"));
 
-		// listen to key presses
+		// listen to key presses	
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		setFocusable(true);
